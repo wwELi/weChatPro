@@ -1,0 +1,50 @@
+(function(){
+     angular.module('app',[])
+     .controller('firestCtrl',['$scope',function($scope){
+     	$scope.data='start read file ...';
+     	$scope.readFile=function(v){
+     		console.log('-----'+v)
+     	};
+     	function read(){
+     		console.log('+++')
+     	};
+     }])
+     .directive('readFile',['$http',function($http){
+     	return{
+     		restrict:'A',
+     		link:function(scope,ele,attr){
+     		
+
+     			var newEle=angular.element(ele);
+     			newEle.bind('change',function(){
+     				if (FileReader) {//chrome浏览器处理
+				    var reader = new FileReader(),
+					file = document.getElementById('file').files[0];
+				     reader.onload = function(e) {
+				     	$http.get(e.target.result).success(function(data){
+                        console.log(data)
+     				})
+     				.error(function(){
+
+     				});
+					//clip.attr("src", e.target.result);//这里是把图片转成64位数据存入<img>中的src里
+				};
+				reader.readAsDataURL(file);
+				//这里需要延迟一下，否则无法放入文本框内
+				//setTimeout("showchange()",1000);
+			}
+
+     				console.log('$$$$$$$$$$$$'+newEle[0].value);
+     				
+     			})
+     	/*		
+                   ele.addEventListener('click',function(){
+     				console.log('$$$$$$$$$$$$');
+     		
+     			});
+     			*/
+     		}
+     	}
+
+     }]);
+})();
